@@ -1,16 +1,19 @@
-function print(str) {
-  console.log(str);
+function print(...args) {
+  console.log(...args);
 }
 
-function input(prompt) {
+function input(promptMessage) {
   return new Promise((resolve) => {
-    const rl = require("readline").createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-    rl.question(prompt, (answer) => {
-      rl.close();
-      resolve(answer);
+    process.stdout.write(promptMessage);
+
+    process.stdin.once('data', (data) => {
+      const inputData = data.toString().trim();
+      resolve(inputData);
+
+      setImmediate(() => {
+        console.log(inputData);
+        process.exit();
+      });
     });
   });
 }
